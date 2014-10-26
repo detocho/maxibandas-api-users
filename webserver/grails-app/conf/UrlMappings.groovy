@@ -12,7 +12,7 @@ class UrlMappings {
 
         "/search" {
             controller = "User"
-            action = [GET: 'notAllowed', POST: 'notAllowed', PUT: 'notAllowed', DELETE: 'notAllowed']
+            action = [GET: 'searchUser', POST: 'notAllowed', PUT: 'notAllowed', DELETE: 'notAllowed']
         }
     }
 }

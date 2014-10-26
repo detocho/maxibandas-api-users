@@ -115,39 +115,82 @@ class UserService {
         jsonResult
     }
 
-    def searchUser(){
+    def searchUser(params){
 
-        def jsonResult = []
-        def userResult = User.findAll()
+        Map jsonResult  = [:]
+        def queryMap    = [:]
+        def userEmail
+        def userPassword
+        def tokenAdmin
 
-        if (!userResult){
-            throw new NotFoundException("Users not found")
+        def SEARCH_PARAMS_MAP =[
+                email:"email",
+                password: "password",
+                admin:"admin",
+        ]
+
+        params.each { key, value ->
+
+            def newKey = SEARCH_PARAMS_MAP[key]
+
+            if (newKey){
+
+                queryMap[newKey]=value
+
+                if (newKey=='email'){
+                    userEmail = value
+                }
+                if (newKey == 'password'){
+                    userPassword = value
+                }
+                if (newKey == 'admin'){
+
+                    tokenAdmin = value
+                }
+
+            }
         }
 
-        userResult.each{
-            jsonResult.add(
-
-                    id                   : it.id,
-                    name                 : it.name,
-                    email                : it.email,
-                    password             : it.password,
-                    phone                : it.phone,
-                    location_id          : it.locationId,
-                    date_of_birth        : it.dateOfBirth,
-                    registration_date    : it.dateRegistered,
-                    date_last_update     : it.dateUpdate,
-                    date_deleted         : it.dateDeleted,
-                    origin               : it.origin,
-                    profile_picture      : it.picture,
-                    sex                  : it.sex,
-                    status               : it.status,
-                    user_type            : it.userType
-
-            )
+        if (!queryMap){
+            throw new BadRequestException("Bad Request call not found params")
         }
+
+
+        tokenAdminValid(tokenAdmin)
+
+
+        def userCriteria = User.createCriteria()
+        def result = userCriteria.list() {
+
+            eq('email', userEmail)
+            eq('password', userPassword)
+
+        }
+
+        if (result.size() == 0){
+            throw new NotFoundException("The User not Found")
+        }
+        def userId
+        result.each{
+            userId = it.id
+        }
+
+        jsonResult.user_id = userId
 
         jsonResult
 
+
+    }
+
+    def tokenAdminValid(def token){
+
+        if(!token){
+            throw new BadRequestException("Access Invalid, Admin not found")
+        }
+
+        if (token != 'MB-ADMIN_123456KKAADPZ'){
+            throw new NotFoundException("Access admin = "+token+" is not found")
+        }
 
     }
 

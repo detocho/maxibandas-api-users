@@ -108,6 +108,30 @@ class UserController {
         }
     }
 
+    def searchUser(){
+
+        setHeaders()
+
+        try{
+
+            def result = userService.searchUser(params)
+            response.setStatus(HttpServletResponse.SC_OK)
+            render result as GSON
+
+        }catch (BadRequestException e){
+
+            renderException(e)
+
+        }catch(NotFoundException e){
+
+            renderException(e)
+
+        }catch (Exception e){
+
+            renderException(e)
+        }
+    }
+
 
     def setHeaders(){
 
