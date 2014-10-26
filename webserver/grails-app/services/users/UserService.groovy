@@ -200,9 +200,12 @@ class UserService {
 
         jsonResult.id                   = userResult.id
         jsonResult.name                 = userResult.name
+
+        /*  los mostramos solo cuando el acceso sea emdiante un token admin o de user o interno
         jsonResult.email                = userResult.email
         jsonResult.password             = userResult.password
         jsonResult.phone                = userResult.phone
+        */
         jsonResult.location_id          = userResult.locationId
         jsonResult.date_of_birth        = userResult.dateOfBirth
         jsonResult.registration_date    = userResult.dateRegistered
