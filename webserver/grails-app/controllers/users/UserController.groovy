@@ -32,7 +32,6 @@ class UserController {
 
     def getUser() {
 
-        def userId = params.userId
         def result
 
         setHeaders()
@@ -40,7 +39,7 @@ class UserController {
         try{
 
 
-            result = userService.getUser(userId)
+            result = userService.getUser(params)
             response.setStatus( HttpServletResponse.SC_OK)
             render result as GSON
 
@@ -87,10 +86,9 @@ class UserController {
 
     def putUser(){
 
-        def userId = params.userId
         setHeaders()
         try {
-            def modifiedUser = userService.modifyUser(userId, request.JSON)
+            def modifiedUser = userService.modifyUser(params, request.JSON)
             response.setStatus(HttpServletResponse.SC_OK)
             render modifiedUser as GSON
         }catch(NotFoundException e){
@@ -115,7 +113,7 @@ class UserController {
         try{
 
             def result = userService.searchUser(params, request.JSON)
-            response.setStatus(HttpServletResponse.SC_OK)
+            response.setStatus(HttpServletResponse.SC_CREATED)
             render result as GSON
 
         }catch (BadRequestException e){
