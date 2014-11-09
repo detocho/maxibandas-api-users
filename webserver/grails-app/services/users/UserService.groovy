@@ -115,48 +115,22 @@ class UserService {
         jsonResult
     }
 
-    def searchUser(params){
+    def searchUser(def params, def jsonUser){
 
         Map jsonResult  = [:]
-        def queryMap    = [:]
-        def userEmail
-        def userPassword
-        def tokenAdmin
 
-        def SEARCH_PARAMS_MAP =[
-                email:"email",
-                password: "password",
-                admin:"admin",
-        ]
-
-        params.each { key, value ->
-
-            def newKey = SEARCH_PARAMS_MAP[key]
-
-            if (newKey){
-
-                queryMap[newKey]=value
-
-                if (newKey=='email'){
-                    userEmail = value
-                }
-                if (newKey == 'password'){
-                    userPassword = value
-                }
-                if (newKey == 'admin'){
-
-                    tokenAdmin = value
-                }
-
-            }
-        }
-
-        if (!queryMap){
-            throw new BadRequestException("Bad Request call not found params")
-        }
-
+        def userEmail       = jsonUser?.email
+        def userPassword    = jsonUser?.password
+        def tokenAdmin      = params.admin
 
         tokenAdminValid(tokenAdmin)
+
+        if (!userEmail){
+            throw new BadRequestException("You must provider the email of user")
+        }
+        if(!userPassword){
+            throw new BadRequestException("You must provider the password of user ")
+        }
 
 
         def userCriteria = User.createCriteria()
@@ -171,11 +145,19 @@ class UserService {
             throw new NotFoundException("The User not Found")
         }
         def userId
+        def userType
+        def status
         result.each{
-            userId = it.id
+
+            userId      = it.id
+            userType    = it.userType
+            status       = it.status
+
         }
 
-        jsonResult.user_id = userId
+        jsonResult.user_id      = userId
+        jsonResult.user_type    = userType
+        jsonResult.status       = status
 
         jsonResult
 
@@ -201,7 +183,7 @@ class UserService {
         jsonResult.id                   = userResult.id
         jsonResult.name                 = userResult.name
 
-        /*  los mostramos solo cuando el acceso sea emdiante un token admin o de user o interno
+        /*  los mostramos solo cuando el acceso sea mediante un token admin o de user o interno
         jsonResult.email                = userResult.email
         jsonResult.password             = userResult.password
         jsonResult.phone                = userResult.phone
@@ -220,34 +202,6 @@ class UserService {
         jsonResult
     }
 
-    /*
 
-    def accessUser(def email, def password){
-
-        def obteinedUser = User.findByEmailAndPassword(email, password)
-        def token
-        def codigo
-        def access
-
-        if (obteinedUser != null)
-        {
-            token = java.net.URLEncoder.encode(obteinedUser.id+'')
-            token = token.encodeAsEncripcion()
-            codigo = 'Valid Acces Token'
-        }
-        else{
-            token = ''
-            codigo = 'Invalid Acces Token'
-        }
-
-        access = [
-                'token': token,
-                'codigo':codigo
-        ]
-
-        return access
-
-    }
-    */
 
 }

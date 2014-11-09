@@ -114,7 +114,7 @@ class UserController {
 
         try{
 
-            def result = userService.searchUser(params)
+            def result = userService.searchUser(params, request.JSON)
             response.setStatus(HttpServletResponse.SC_OK)
             render result as GSON
 
