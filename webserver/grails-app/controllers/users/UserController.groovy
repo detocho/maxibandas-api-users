@@ -1,5 +1,7 @@
 package users
 
+import org.bouncycastle.util.IPAddress
+
 import javax.servlet.http.HttpServletResponse
 import grails.converters.*
 //import grails.transaction.*
@@ -29,12 +31,27 @@ class UserController {
         render mapResult as GSON
     }
 
+    def getIp(){
+
+        String remoteAddress = request.getRemoteAddr()
+        InetAddress inetAddress = InetAddress.getByName(remoteAddress)
+        if (inetAddress instanceof Inet6Address) {
+            // do something if visitor is using IPv6
+            render "ip V6 "+remoteAddress
+        } else {
+            // do something if visitor is using IPv4
+            render "ip V4 "+remoteAddress
+        }
+
+    }
+
 
     def getUser() {
 
         def result
 
         setHeaders()
+
 
         try{
 
