@@ -3,10 +3,15 @@ package users
 /**
  * Created by dpaz on 07/11/14.
  */
+import org.bouncycastle.util.IPAddress
 import javax.servlet.http.HttpServletResponse
 import org.joda.time.format.DateTimeParser
 import users.exceptions.ConflictException
 import users.exceptions.BadRequestException
+import groovyx.net.http.*
+import org.codehaus.groovy.grails.web.util.WebUtils
+import org.codehaus.groovy.grails.commons.DefaultGrailsApplication
+
 
 class ValidAccess{
 
@@ -98,6 +103,33 @@ class ValidAccess{
         }
 
         userType
+    }
+
+    def isInternal(){
+
+        def grailsApplication = new DefaultGrailsApplication()
+
+        def ipValid = grailsApplication.config.ipValid
+
+        def result = false
+        def request = WebUtils.retrieveGrailsWebRequest().getCurrentRequest()
+
+        String remoteAddress = request.getRemoteAddr()
+        InetAddress inetAddress = InetAddress.getByName(remoteAddress)
+        if (inetAddress instanceof Inet6Address) {
+
+            if (remoteAddress == ipValid){
+                result = true
+            }
+
+        } else {
+            if (remoteAddress == ipValid){
+                result = true
+            }
+
+        }
+
+        result
     }
 
 

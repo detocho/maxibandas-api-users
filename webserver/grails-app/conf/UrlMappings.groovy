@@ -15,9 +15,9 @@ class UrlMappings {
             action = [GET: 'notAllowed', POST: 'searchUser', PUT: 'notAllowed', DELETE: 'notAllowed']
         }
 
-        "/getIp"{
+        "/searchByEmail/$email?"{
             controller = "User"
-            action  =[GET: 'getIp', POST: 'notAllowed', PUT: 'notAllowed', DELETE: 'notAllowed']
+            action  =[GET: 'getUserByEmail', POST: 'notAllowed', PUT: 'notAllowed', DELETE: 'notAllowed']
         }
     }
 }

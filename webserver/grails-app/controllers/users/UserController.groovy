@@ -31,20 +31,31 @@ class UserController {
         render mapResult as GSON
     }
 
-    def getIp(){
+    def getUserByEmail(){
 
-        String remoteAddress = request.getRemoteAddr()
-        InetAddress inetAddress = InetAddress.getByName(remoteAddress)
-        if (inetAddress instanceof Inet6Address) {
-            // do something if visitor is using IPv6
-            render "ip V6 "+remoteAddress
-        } else {
-            // do something if visitor is using IPv4
-            render "ip V4 "+remoteAddress
+        def result
+        setHeaders()
+        try{
+
+            result = userService.searchUserByEmail(params)
+            response.setStatus( HttpServletResponse.SC_OK)
+            render result as GSON
+
+        }catch (BadRequestException e) {
+
+            renderException(e)
+
+        }catch (ConflictException e){
+
+            renderException(e)
+
+        }catch (Exception e){
+
+            renderException(e)
+
         }
 
     }
-
 
     def getUser() {
 

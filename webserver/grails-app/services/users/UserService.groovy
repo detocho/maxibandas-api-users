@@ -7,11 +7,12 @@ import users.exceptions.NotFoundException
 import users.exceptions.ConflictException
 import users.exceptions.BadRequestException
 
+
+
 class UserService {
 
     static transactional = 'mongo'
     def validAccess = new ValidAccess()
-
 
 
     def getUser(def params){
@@ -55,6 +56,7 @@ class UserService {
 
         User newUser = new User(
 
+                name:       jsonUser?.name ? jsonUser.name : "",
                 phone:      jsonUser?.phone,
                 email:      jsonUser?.email,
                 password:   jsonUser?.password,
@@ -196,6 +198,61 @@ class UserService {
 
     }
 
+    def searchUserByEmail(def params){
+
+        Map jsonResult  = [:]
+
+
+        if(!validAccess.isInternal()){
+            throw new ConflictException("Not valid method")
+        }
+
+        def userEmail       = params.email
+
+
+
+        if (!userEmail){
+            throw new BadRequestException("You must provider the email of user")
+        }
+
+
+
+        def userCriteria = User.createCriteria()
+        def result = userCriteria.list() {
+            eq('email', userEmail)
+
+        }
+
+        if (result.size() == 0){
+            throw new NotFoundException("The User not Found")
+        }
+        def userId
+        def userType
+        def status
+        def email
+        def name
+        result.each{
+
+            userId      = it.id
+            userType    = it.userType
+            status      = it.status
+            email       = it.email
+            name        = it.name
+
+        }
+
+        jsonResult.user_id      = userId
+        jsonResult.user_type    = userType
+        jsonResult.status       = status
+        jsonResult.email        = email
+        jsonResult.name         = name
+
+
+        jsonResult
+
+
+    }
+
     def tokenAdminValid(def token){
 
         if(!token){
@@ -214,10 +271,10 @@ class UserService {
         Map jsonResult=[:]
 
         jsonResult.id                   = userResult.id
-        jsonResult.name                 = userResult.name
+        jsonResult.name                 = userResult.name ? userResult.name : ""
 
-        if (access_token) {
-        //  los mostramos solo cuando el acceso sea mediante un token admin o de user o interno
+        if (access_token || validAccess.isInternal()) {
+
         jsonResult.email                = userResult.email
         //jsonResult.password             = userResult.password
         jsonResult.phone                = userResult.phone

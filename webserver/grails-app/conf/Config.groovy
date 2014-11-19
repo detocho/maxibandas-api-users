@@ -62,10 +62,13 @@ grails.hibernate.cache.queries = false
 environments {
     development {
         grails.logging.jul.usebridge = true
+        ipValid ='0:0:0:0:0:0:0:1%0'
     }
     production {
         grails.logging.jul.usebridge = false
         // TODO: grails.serverURL = "http://www.changeme.com"
+
+        ipValid ='69.162.90.50'
     }
 }
 
