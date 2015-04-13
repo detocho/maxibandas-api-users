@@ -203,9 +203,9 @@ class UserService {
         Map jsonResult  = [:]
 
 
-        if(!validAccess.isInternal()){
+       /* if(!validAccess.isInternal()){
             throw new ConflictException("Not valid method")
-        }
+        }*/
 
         def userEmail       = params.email
 

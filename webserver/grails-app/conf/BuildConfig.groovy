@@ -35,7 +35,7 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.20'
-        compile('org.grails.plugins:gson:1.1.4')
+        //compile('org.grails.plugins:gson:1.1.4')
 
         compile ('joda-time:joda-time:2.3')
 

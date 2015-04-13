@@ -7,7 +7,7 @@ import grails.converters.*
 //import grails.transaction.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.http.HttpMethod.*
-import grails.plugin.gson.converters.GSON
+import grails.converters.JSON
 import users.exceptions.NotFoundException
 import users.exceptions.ConflictException
 import users.exceptions.BadRequestException
@@ -28,7 +28,7 @@ class UserController {
                 status: HttpServletResponse.SC_METHOD_NOT_ALLOWED,
                 error:"not_allowed"
         ]
-        render mapResult as GSON
+        render mapResult as JSON
     }
 
     def getUserByEmail(){
@@ -39,7 +39,7 @@ class UserController {
 
             result = userService.searchUserByEmail(params)
             response.setStatus( HttpServletResponse.SC_OK)
-            render result as GSON
+            render result as JSON
 
         }catch (BadRequestException e) {
 
@@ -69,7 +69,7 @@ class UserController {
 
             result = userService.getUser(params)
             response.setStatus( HttpServletResponse.SC_OK)
-            render result as GSON
+            render result as JSON
 
         }catch(NotFoundException e){
 
@@ -91,7 +91,7 @@ class UserController {
 
             result = userService.createUser(request.JSON)
             response.setStatus( HttpServletResponse.SC_CREATED)
-            render result as GSON
+            render result as JSON
 
         }catch (BadRequestException e) {
 
@@ -118,7 +118,7 @@ class UserController {
         try {
             def modifiedUser = userService.modifyUser(params, request.JSON)
             response.setStatus(HttpServletResponse.SC_OK)
-            render modifiedUser as GSON
+            render modifiedUser as JSON
         }catch(NotFoundException e){
 
             renderException(e)
@@ -142,7 +142,7 @@ class UserController {
 
             def result = userService.searchUser(params, request.JSON)
             response.setStatus(HttpServletResponse.SC_CREATED)
-            render result as GSON
+            render result as JSON
 
         }catch (BadRequestException e){
 
@@ -191,7 +191,7 @@ class UserController {
                 error: error
         ]
 
-        render mapExcepction as GSON
+        render mapExcepction as JSON
 
     }
 }
