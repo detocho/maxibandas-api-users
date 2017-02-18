@@ -24,6 +24,7 @@ grails.project.dependency.resolution = {
 
         mavenLocal()
         mavenCentral()
+        grailsRepo "https://grails.org/plugins" 
 
         // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
         //mavenRepo "http://snapshots.repository.codehaus.org"
@@ -56,6 +57,7 @@ grails.project.dependency.resolution = {
         build ":tomcat:$grailsVersion"
         compile ':cache:1.0.0'
         compile ":mongodb:1.1.0.GA"
+        //compile "org.grails.plugins:mongodb:5.0.0.RC1"
         compile ":cors:1.1.4"
     }
 }
